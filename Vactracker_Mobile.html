@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2E7D32">
+<meta name="apple-mobile-web-app-title" content="Vactracker">
+<title>Vactracker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐔%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+  html, body { overflow: hidden; overscroll-behavior: none; }
+
+  :root {
+    --primary: #2E7D32;
+    --primary-dark: #1B5E20;
+    --primary-light: #C8E6C9;
+    --secondary: #1976D2;
+    --accent: #E65100;
+    --danger: #C62828;
+    --warning: #F9A825;
+    --success: #2E7D32;
+    --bg: #F5F7FA;
+    --card: #FFFFFF;
+    --text: #1A1A1A;
+    --text-muted: #707070;
+    --border: #E5E7EB;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  body {
+    font-family: 'Inter', 'Battambang', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+  .kh { font-family: 'Battambang', 'Inter', sans-serif; }
+
+  .app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  /* Screen container */
+  .screen {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--bg);
+    -webkit-overflow-scrolling: touch;
+  }
+  .screen.active { display: flex; }
+
+  /* App top header (in-screen) */
+  .app-header {
+    padding: calc(var(--safe-top) + 14px) 18px 14px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .app-header .title { font-size: 18px; font-weight: 700; }
+  .app-header .subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .header-btn {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .header-btn.menu-btn {
+    background: transparent;
+    color: var(--text);
+    font-size: 26px;
+  }
+  .back-btn {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 26px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content {
+    padding: 16px;
+    padding-bottom: 100px;
+    flex: 1;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: white;
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 8px 0 calc(var(--safe-bottom) + 8px);
+    justify-content: space-around;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 6px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .nav-item .icon {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .nav-item.active { color: var(--primary); }
+
+  /* ========== SPLASH ========== */
+  #screen-splash {
+    background: linear-gradient(160deg, #2E7D32 0%, #1B5E20 60%, #0D3D11 100%);
+    color: white;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--safe-top) + 60px) 30px calc(var(--safe-bottom) + 40px);
+    text-align: center;
+  }
+  #screen-splash .logo { font-size: 80px; margin-bottom: 12px; }
+  #screen-splash h2 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  #screen-splash .tagline {
+    font-size: 17px;
+    opacity: 0.92;
+    line-height: 1.5;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  #screen-splash .splash-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #screen-splash .splash-bottom { width: 100%; }
+  .splash-btn {
+    width: 100%;
+    padding: 18px;
+    background: white;
+    color: var(--primary-dark);
+    border: none;
+    border-radius: 100px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    font-family: inherit;
+  }
+  .splash-link {
+    color: white;
+    text-decoration: underline;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.9;
+  }
+  .lang-pill {
+    position: absolute;
+    top: calc(var(--safe-top) + 16px);
+    right: 16px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  /* ========== HOME ========== */
+  .summary-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 16px rgba(46,125,50,0.25);
+  }
+  .summary-card .label {
+    font-size: 12px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .summary-card .count {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .summary-card .count-label { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+  .status-row { display: flex; gap: 8px; margin-top: 16px; }
+  .status-pill {
+    flex: 1;
+    background: rgba(255,255,255,0.18);
+    padding: 10px 6px;
+    border-radius: 12px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+  }
+  .status-pill .num { font-size: 20px; font-weight: 700; }
+  .status-pill .lbl { font-size: 10px; opacity: 0.9; margin-top: 2px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin: 18px 4px 12px;
+  }
+  .chicken-card {
+    background: white;
+    padding: 14px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    cursor: pointer;
+  }
+  .chicken-card:active { transform: scale(0.98); }
+  .chicken-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .chicken-icon.amber { background: #FFF3D6; }
+  .chicken-icon.red { background: #FFD6D6; }
+  .chicken-info { flex: 1; min-width: 0; }
+  .chicken-name { font-size: 15px; font-weight: 700; }
+  .chicken-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .chicken-status {
+    font-size: 11px;
+    padding: 5px 11px;
+    border-radius: 100px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .status-ok { background: #DFF5E0; color: var(--success); }
+  .status-soon { background: #FFF4D2; color: #B26500; }
+  .status-overdue { background: #FFE0E0; color: var(--danger); }
+
+  /* FAB */
+  .fab {
+    position: fixed;
+    bottom: calc(var(--safe-bottom) + 80px);
+    right: 18px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 32px;
+    box-shadow: 0 6px 16px rgba(46,125,50,0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+  }
+  .fab:active { transform: scale(0.92); }
+
+  /* ========== FORMS ========== */
+  .form-group { margin-bottom: 20px; }
+  .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+  .form-input {
+    width: 100%;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: border 0.2s;
+  }
+  .form-input:focus { border-color: var(--primary); outline: none; }
+  .number-stepper {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    padding: 8px;
+  }
+  .stepper-btn {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-light);
+    border: none;
+    border-radius: 10px;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .stepper-btn:active { transform: scale(0.92); }
+  .stepper-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    font-family: inherit;
+    background: transparent;
+    pointer-events: none;
+  }
+  .quick-pills { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .pill {
+    background: white;
+    border: 1.5px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .pill.selected { background: var(--primary); color: white; border-color: var(--primary); }
+  .pill:active { transform: scale(0.96); }
+
+  .primary-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(46,125,50,0.25);
+  }
+  .primary-btn:active { transform: scale(0.98); }
+  .secondary-btn {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* ========== VACCINE LIST ========== */
+  .vaccine-list { display: flex; flex-direction: column; gap: 10px; }
+  .vaccine-option {
+    background: white;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .vaccine-option.selected { border-color: var(--primary); background: #F2FAF3; }
+  .vaccine-option:active { transform: scale(0.99); }
+  .vac-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .vac-name { font-size: 15px; font-weight: 700; }
+  .vac-sched { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .voice-btn {
+    width: 100%;
+    background: white;
+    border: 2px dashed var(--primary);
+    border-radius: 14px;
+    padding: 20px;
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-family: inherit;
+  }
+  .voice-btn .mic { font-size: 24px; }
+
+  /* ========== REMINDER (LOCK SCREEN) ========== */
+  #screen-reminder {
+    background: linear-gradient(180deg, #87a5c4 0%, #b8c5d4 100%);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 380 800'><defs><linearGradient id='g' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='%23a8edea'/><stop offset='0.5' stop-color='%23fed6e3'/><stop offset='1' stop-color='%23ffeaa7'/></linearGradient></defs><rect width='380' height='800' fill='url(%23g)'/><text x='50%25' y='40%25' text-anchor='middle' font-size='160' opacity='0.15'>🐓</text><text x='30%25' y='60%25' text-anchor='middle' font-size='80' opacity='0.12'>🐔</text><text x='70%25' y='70%25' text-anchor='middle' font-size='90' opacity='0.12'>🐥</text></svg>");
+    background-size: cover;
+    padding: 0 16px calc(var(--safe-bottom) + 20px);
+  }
+  .lock-time {
+    text-align: center;
+    padding-top: calc(var(--safe-top) + 60px);
+    color: white;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .lock-time .day { font-size: 18px; font-weight: 500; opacity: 0.95; }
+  .lock-time .clock {
+    font-size: 90px;
+    font-weight: 200;
+    letter-spacing: -4px;
+    line-height: 1;
+    margin-top: 4px;
+  }
+  .notif-card {
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 18px;
+    padding: 16px;
+    margin-top: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+  .notif-card:active { transform: scale(0.98); }
+  .notif-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .notif-icon {
+    width: 24px;
+    height: 24px;
+    background: var(--primary);
+    border-radius: 6px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .notif-app { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .notif-time { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+  .notif-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .notif-body { font-size: 13px; color: #333; line-height: 1.5; }
+  .lock-hint {
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    opacity: 0.85;
+    margin-top: 30px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  /* ========== VET DASHBOARD ========== */
+  .vet-header {
+    background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+    color: white;
+    padding: calc(var(--safe-top) + 20px) 18px 20px;
+    border-radius: 0 0 24px 24px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .vet-header .greeting { font-size: 13px; opacity: 0.9; }
+  .vet-header .name { font-size: 24px; font-weight: 800; margin: 4px 0 14px; }
+  .vet-stats { display: flex; gap: 10px; }
+  .vet-stat {
+    flex: 1;
+    background: rgba(255,255,255,0.18);
+    padding: 12px;
+    border-radius: 14px;
+    backdrop-filter: blur(8px);
+  }
+  .vet-stat .n { font-size: 24px; font-weight: 800; }
+  .vet-stat .l {
+    font-size: 10px;
+    opacity: 0.9;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .client-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin: 0 16px 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .client-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #6D4C00;
+    flex-shrink: 0;
+  }
+  .client-name { font-size: 15px; font-weight: 700; }
+  .client-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .client-badge {
+    font-size: 10px;
+    padding: 5px 9px;
+    border-radius: 100px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ========== OUTBREAK ALERT ========== */
+  #screen-outbreak {
+    background: linear-gradient(180deg, #FFEBEE 0%, #FFF3E0 100%);
+  }
+  .alert-banner {
+    background: linear-gradient(135deg, #C62828 0%, #8E0000 100%);
+    color: white;
+    padding: calc(var(--safe-top) + 22px) 20px 24px;
+    text-align: center;
+    border-radius: 0 0 28px 28px;
+    box-shadow: 0 4px 16px rgba(198,40,40,0.3);
+    position: relative;
+  }
+  .alert-banner .icon { font-size: 56px; margin-bottom: 8px; animation: pulse 1.4s ease-in-out infinite; }
+  .alert-banner .title { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+  .alert-banner .sub { font-size: 13px; opacity: 0.95; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+
+  .alert-card {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    margin: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .alert-card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .alert-card h3 { font-size: 17px; margin-bottom: 8px; }
+  .alert-card p { font-size: 14px; color: #444; line-height: 1.5; }
+  .recommend-list { list-style: none; margin-top: 10px; }
+  .recommend-list li {
+    padding: 10px 0;
+    font-size: 14px;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.4;
+  }
+  .recommend-list li:last-child { border-bottom: none; }
+  .recommend-list li::before { content: "✓"; color: var(--primary); font-weight: 800; flex-shrink: 0; }
+  .alert-btn {
+    background: var(--danger);
+    color: white;
+    width: calc(100% - 32px);
+    margin: 0 16px 24px;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(198,40,40,0.25);
+  }
+
+  /* ========== SIDE MENU ========== */
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 100;
+  }
+  .menu-overlay.open { opacity: 1; pointer-events: auto; }
+  .menu-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80%;
+    max-width: 320px;
+    height: 100%;
+    background: white;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+    z-index: 101;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: calc(var(--safe-top) + 24px) 0 calc(var(--safe-bottom) + 24px);
+    overflow-y: auto;
+  }
+  .menu-panel.open { transform: translateX(0); }
+  .menu-header {
+    padding: 0 24px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .menu-title { font-size: 20px; font-weight: 800; color: var(--primary-dark); }
+  .menu-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .menu-item {
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+  }
+  .menu-item:active { background: var(--primary-light); }
+  .menu-item .emoji { font-size: 22px; }
+  .menu-item.active { color: var(--primary); background: #F2FAF3; }
+  .menu-divider { height: 1px; background: var(--border); margin: 12px 24px; }
+  .menu-section { padding: 0 24px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .menu-lang { display: flex; gap: 8px; padding: 0 24px; margin-top: 12px; }
+  .menu-lang button {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--border);
+    background: white;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .menu-lang button.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* ========== ONBOARDING HINT ========== */
+  .hint-toast {
+    position: fixed;
+    top: calc(var(--safe-top) + 70px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.85);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 50;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    animation: hint-in 0.4s ease, hint-out 0.6s ease 3.5s forwards;
+    pointer-events: none;
+    max-width: 90vw;
+    text-align: center;
+  }
+  @keyframes hint-in {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+  @keyframes hint-out {
+    to { opacity: 0; transform: translate(-50%, -10px); }
+  }
+
+  /* Toast */
+  .save-toast {
+    position: fixed;
+    bottom: calc(var(--safe-bottom) + 100px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 14px 22px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 14px;
+    z-index: 200;
+    box-shadow: 0 8px 24px rgba(46,125,50,0.4);
+    animation: hint-in 0.3s ease;
+    max-width: 90vw;
+    text-align: center;
+  }
+
+  /* Language toggle visibility */
+  .lang-en .kh-text { display: none; }
+  .lang-kh .en-text { display: none; }
+
+</style>
+</head>
+<body class="lang-en">
+
+<div class="app">
+
+  <!-- ====================== SPLASH ====================== -->
+  <div class="screen active" id="screen-splash">
+    <div class="lang-pill" onclick="toggleLang()">
+      <span class="en-text">ខ្មែរ</span>
+      <span class="kh-text">EN</span>
+    </div>
+    <div class="splash-center">
+      <div class="logo">🐔</div>
+      <h2>Vactracker</h2>
+      <p class="tagline">
+        <span class="en-text">Protect your flock.<br>Protect your family.</span>
+        <span class="kh-text kh">ការពារហ្វូងសត្វ<br>ការពារក្រុមគ្រួសារ</span>
+      </p>
+    </div>
+    <div class="splash-bottom">
+      <button class="splash-btn" onclick="showScreen('home'); showHint()">
+        <span class="en-text">Get Started →</span>
+        <span class="kh-text kh">ចាប់ផ្តើម →</span>
+      </button>
+      <div class="splash-link" onclick="showScreen('home')">
+        <span class="en-text">I already have an account</span>
+        <span class="kh-text kh">ខ្ញុំមានគណនីរួចហើយ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== HOME ====================== -->
+  <div class="screen" id="screen-home">
+    <div class="app-header">
+      <div>
+        <div class="title">
+          <span class="en-text">My Flock</span>
+          <span class="kh-text kh">ហ្វូងសត្វរបស់ខ្ញុំ</span>
+        </div>
+        <div class="subtitle">
+          <span class="en-text">Hello, Srey Mom 👋</span>
+          <span class="kh-text kh">សួស្តី ស្រីមុំ 👋</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="header-btn" onclick="showScreen('outbreak')">🔔</button>
+        <button class="header-btn menu-btn" onclick="openMenu()">☰</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="summary-card">
+        <div class="label">
+          <span class="en-text">Total Chickens</span>
+          <span class="kh-text kh">ចំនួនមាន់សរុប</span>
+        </div>
+        <div class="count">25</div>
+        <div class="count-label">
+          <span class="en-text">in your flock</span>
+          <span class="kh-text kh">នៅក្នុងហ្វូងរបស់អ្នក</span>
+        </div>
+        <div class="status-row">
+          <div class="status-pill">
+            <div class="num">18</div>
+            <div class="lbl">
+              <span class="en-text">✅ OK</span>
+              <span class="kh-text kh">✅ ល្អ</span>
+            </div>
+          </div>
+          <div class="status-pill">
+            <div class="num">5</div>
+            <div class="lbl">
+              <span class="en-text">🟡 Soon</span>
+              <span class="kh-text kh">🟡 ជិតដល់</span>
+            </div>
+          </div>
+          <div class="status-pill">
+            <div class="num">2</div>
+            <div class="lbl">
+              <span class="en-text">🔴 Late</span>
+              <span class="kh-text kh">🔴 យឺត</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span class="en-text">Your flocks</span>
+        <span class="kh-text kh">ហ្វូងសត្វរបស់អ្នក</span>
+      </div>
+
+      <div class="chicken-card" onclick="showScreen('log-vaccine')">
+        <div class="chicken-icon">🐓</div>
+        <div class="chicken-info">
+          <div class="chicken-name">
+            <span class="en-text">Batch A — 12 hens</span>
+            <span class="kh-text kh">ក្រុម A — មាន់ ១២ ក្បាល</span>
+          </div>
+          <div class="chicken-meta">
+            <span class="en-text">Newcastle • Last dose 2 mo ago</span>
+            <span class="kh-text kh">ញាស់ឌី • ដូសចុងក្រោយ ២ ខែមុន</span>
+          </div>
+        </div>
+        <div class="chicken-status status-ok">
+          <span class="en-text">OK</span>
+          <span class="kh-text kh">ល្អ</span>
+        </div>
+      </div>
+
+      <div class="chicken-card" onclick="showScreen('log-vaccine')">
+        <div class="chicken-icon amber">🐔</div>
+        <div class="chicken-info">
+          <div class="chicken-name">
+            <span class="en-text">Batch B — 8 layers</span>
+            <span class="kh-text kh">ក្រុម B — មាន់ពង ៨ ក្បាល</span>
+          </div>
+          <div class="chicken-meta">
+            <span class="en-text">Avian Flu • Due in 3 days</span>
+            <span class="kh-text kh">គ្រុនផ្ដាសាយ • ត្រូវចាក់ក្នុង ៣ ថ្ងៃ</span>
+          </div>
+        </div>
+        <div class="chicken-status status-soon">
+          <span class="en-text">DUE</span>
+          <span class="kh-text kh">ជិតដល់</span>
+        </div>
+      </div>
+
+      <div class="chicken-card" onclick="showScreen('log-vaccine')">
+        <div class="chicken-icon red">🐥</div>
+        <div class="chicken-info">
+          <div class="chicken-name">
+            <span class="en-text">Batch C — 5 chicks</span>
+            <span class="kh-text kh">ក្រុម C — កូនមាន់ ៥ ក្បាល</span>
+          </div>
+          <div class="chicken-meta">
+            <span class="en-text">Fowl Pox • Overdue 4 days</span>
+            <span class="kh-text kh">ស្បែកក្រិន • ហួសពេល ៤ ថ្ងៃ</span>
+          </div>
+        </div>
+        <div class="chicken-status status-overdue">
+          <span class="en-text">LATE</span>
+          <span class="kh-text kh">យឺត</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="fab" onclick="showScreen('add-chicken')">+</button>
+
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="showScreen('home')">
+        <span class="icon">🏠</span>
+        <span class="en-text">Home</span>
+        <span class="kh-text kh">ដើម</span>
+      </div>
+      <div class="nav-item" onclick="showScreen('log-vaccine')">
+        <span class="icon">💉</span>
+        <span class="en-text">Log</span>
+        <span class="kh-text kh">កត់ត្រា</span>
+      </div>
+      <div class="nav-item" onclick="showScreen('outbreak')">
+        <span class="icon">⚠️</span>
+        <span class="en-text">Alerts</span>
+        <span class="kh-text kh">ដំណឹង</span>
+      </div>
+      <div class="nav-item" onclick="showScreen('vet')">
+        <span class="icon">👨‍⚕️</span>
+        <span class="en-text">Vet</span>
+        <span class="kh-text kh">គ្រូពេទ្យ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== ADD CHICKEN ====================== -->
+  <div class="screen" id="screen-add-chicken">
+    <div class="app-header">
+      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <div style="flex:1; text-align:center;">
+        <div class="title">
+          <span class="en-text">Add Chickens</span>
+          <span class="kh-text kh">បន្ថែមមាន់</span>
+        </div>
+      </div>
+      <button class="header-btn menu-btn" onclick="openMenu()">☰</button>
+    </div>
+
+    <div class="content">
+      <div class="form-group">
+        <label class="form-label">
+          <span class="en-text">How many chickens? 🐔</span>
+          <span class="kh-text kh">តើមាន់មានប៉ុន្មានក្បាល? 🐔</span>
+        </label>
+        <div class="number-stepper">
+          <button class="stepper-btn" onclick="updateCount(-1)">−</button>
+          <input type="text" class="stepper-input" id="count" value="25" readonly>
+          <button class="stepper-btn" onclick="updateCount(1)">+</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <span class="en-text">Batch name</span>
+          <span class="kh-text kh">ឈ្មោះក្រុម</span>
+        </label>
+        <input type="text" class="form-input" value="Batch A">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <span class="en-text">Type / Breed</span>
+          <span class="kh-text kh">ប្រភេទ</span>
+        </label>
+        <div class="quick-pills">
+          <div class="pill selected" onclick="selectPill(this)">
+            <span class="en-text">Local hens</span>
+            <span class="kh-text kh">មាន់ស្រុក</span>
+          </div>
+          <div class="pill" onclick="selectPill(this)">
+            <span class="en-text">Layers</span>
+            <span class="kh-text kh">មាន់ពង</span>
+          </div>
+          <div class="pill" onclick="selectPill(this)">
+            <span class="en-text">Broilers</span>
+            <span class="kh-text kh">មាន់សាច់</span>
+          </div>
+          <div class="pill" onclick="selectPill(this)">
+            <span class="en-text">Chicks</span>
+            <span class="kh-text kh">កូនមាន់</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <span class="en-text">Approximate age</span>
+          <span class="kh-text kh">អាយុ​ប្រហែល</span>
+        </label>
+        <div class="quick-pills">
+          <div class="pill selected" onclick="selectPill(this)">
+            <span class="en-text">2-3 months</span>
+            <span class="kh-text kh">២-៣ ខែ</span>
+          </div>
+          <div class="pill" onclick="selectPill(this)">
+            <span class="en-text">3-6 months</span>
+            <span class="kh-text kh">៣-៦ ខែ</span>
+          </div>
+          <div class="pill" onclick="selectPill(this)">
+            <span class="en-text">6+ months</span>
+            <span class="kh-text kh">លើស ៦ ខែ</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="primary-btn" onclick="showScreen('log-vaccine')">
+        <span class="en-text">Save & Add Vaccine →</span>
+        <span class="kh-text kh">រក្សាទុក & បន្ថែមវ៉ាក់សាំង →</span>
+      </button>
+      <button class="secondary-btn" onclick="showScreen('home')">
+        <span class="en-text">Cancel</span>
+        <span class="kh-text kh">បោះបង់</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================== LOG VACCINE ====================== -->
+  <div class="screen" id="screen-log-vaccine">
+    <div class="app-header">
+      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <div style="flex:1; text-align:center;">
+        <div class="title">
+          <span class="en-text">Log a Vaccine</span>
+          <span class="kh-text kh">កត់ត្រាការចាក់វ៉ាក់សាំង</span>
+        </div>
+        <div class="subtitle">
+          <span class="en-text">Batch A — 12 hens</span>
+          <span class="kh-text kh">ក្រុម A — មាន់ ១២ ក្បាល</span>
+        </div>
+      </div>
+      <button class="header-btn menu-btn" onclick="openMenu()">☰</button>
+    </div>
+
+    <div class="content">
+      <label class="form-label" style="margin-bottom:14px;">
+        <span class="en-text">Which vaccine?</span>
+        <span class="kh-text kh">វ៉ាក់សាំងអ្វី?</span>
+      </label>
+
+      <div class="vaccine-list">
+        <div class="vaccine-option selected" onclick="selectVaccine(this)">
+          <div class="vac-icon">💉</div>
+          <div>
+            <div class="vac-name">
+              <span class="en-text">Newcastle Disease</span>
+              <span class="kh-text kh">ជំងឺញាស់ឌី</span>
+            </div>
+            <div class="vac-sched">
+              <span class="en-text">Booster every 3 months</span>
+              <span class="kh-text kh">ចាក់ឡើងវិញរៀងរាល់ ៣ ខែ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vaccine-option" onclick="selectVaccine(this)">
+          <div class="vac-icon">💉</div>
+          <div>
+            <div class="vac-name">
+              <span class="en-text">Avian Influenza (H5N1)</span>
+              <span class="kh-text kh">គ្រុនផ្ដាសាយបក្សី (H5N1)</span>
+            </div>
+            <div class="vac-sched">
+              <span class="en-text">Annual booster</span>
+              <span class="kh-text kh">ចាក់ឡើងវិញ​ប្រចាំឆ្នាំ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vaccine-option" onclick="selectVaccine(this)">
+          <div class="vac-icon">💉</div>
+          <div>
+            <div class="vac-name">
+              <span class="en-text">Fowl Pox</span>
+              <span class="kh-text kh">ស្បែកក្រិន​មាន់</span>
+            </div>
+            <div class="vac-sched">
+              <span class="en-text">Once at 6 weeks</span>
+              <span class="kh-text kh">ម្ដងនៅ ៦ សប្ដាហ៍</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vaccine-option" onclick="selectVaccine(this)">
+          <div class="vac-icon">💉</div>
+          <div>
+            <div class="vac-name">
+              <span class="en-text">Infectious Bronchitis</span>
+              <span class="kh-text kh">រលាកស្ទះដង្ហើម</span>
+            </div>
+            <div class="vac-sched">
+              <span class="en-text">Every 4 months</span>
+              <span class="kh-text kh">រាល់ ៤ ខែ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="voice-btn">
+        <span class="mic">🎙️</span>
+        <span class="en-text">Hold to record in Khmer</span>
+        <span class="kh-text kh">ចុចសង្កត់ដើម្បីថត​ជាខ្មែរ</span>
+      </button>
+
+      <button class="primary-btn" onclick="showSavedAndGoHome()" style="margin-top:18px;">
+        <span class="en-text">✓ Save Vaccination</span>
+        <span class="kh-text kh">✓ រក្សាទុក</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================== REMINDER (LOCK SCREEN) ====================== -->
+  <div class="screen" id="screen-reminder">
+    <div class="lang-pill" onclick="toggleLang()" style="background:rgba(255,255,255,0.25);">
+      <span class="en-text">ខ្មែរ</span>
+      <span class="kh-text">EN</span>
+    </div>
+
+    <div class="lock-time">
+      <div class="day">
+        <span class="en-text">Thursday, May 28</span>
+        <span class="kh-text kh">ថ្ងៃព្រហស្បតិ៍ ទី ២៨ ឧសភា</span>
+      </div>
+      <div class="clock">9:41</div>
+    </div>
+
+    <div class="notif-card" onclick="showScreen('log-vaccine')">
+      <div class="notif-head">
+        <div class="notif-icon">🐔</div>
+        <div class="notif-app">VACTRACKER</div>
+        <div class="notif-time">
+          <span class="en-text">now</span>
+          <span class="kh-text kh">ឥឡូវ</span>
+        </div>
+      </div>
+      <div class="notif-title">
+        <span class="en-text">⏰ Vaccine due in 3 days</span>
+        <span class="kh-text kh">⏰ ត្រូវចាក់វ៉ាក់សាំងក្នុង ៣ ថ្ងៃ</span>
+      </div>
+      <div class="notif-body">
+        <span class="en-text">Your Batch B (8 layers) needs a Newcastle booster on Sunday. Tap to confirm or reschedule.</span>
+        <span class="kh-text kh">ក្រុម B (មាន់ពង ៨ ក្បាល) ត្រូវចាក់ឡើងវិញនៅថ្ងៃអាទិត្យ។ ចុចដើម្បីបញ្ជាក់ឬផ្លាស់ប្ដូរ។</span>
+      </div>
+    </div>
+
+    <div class="notif-card" onclick="showScreen('vet')">
+      <div class="notif-head">
+        <div class="notif-icon" style="background:var(--secondary);">👨‍⚕️</div>
+        <div class="notif-app">VACTRACKER</div>
+        <div class="notif-time">
+          <span class="en-text">5 min ago</span>
+          <span class="kh-text kh">៥ នាទីមុន</span>
+        </div>
+      </div>
+      <div class="notif-title">
+        <span class="en-text">Dr. Sokha visiting Friday</span>
+        <span class="kh-text kh">លោកគ្រូ សុខា នឹងមកថ្ងៃសុក្រ</span>
+      </div>
+      <div class="notif-body">
+        <span class="en-text">He can give the Newcastle booster while he's here.</span>
+        <span class="kh-text kh">លោកអាចចាក់ឱ្យបាននៅពេលគាត់មកដល់។</span>
+      </div>
+    </div>
+
+    <div class="lock-hint" onclick="showScreen('home')">
+      <span class="en-text">👆 Tap a notification to open the app</span>
+      <span class="kh-text kh">👆 ចុចលើដំណឹងដើម្បីបើកកម្មវិធី</span>
+    </div>
+  </div>
+
+  <!-- ====================== VET DASHBOARD ====================== -->
+  <div class="screen" id="screen-vet">
+    <div class="vet-header">
+      <button class="back-btn" onclick="showScreen('home')" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;">←</button>
+      <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px); color:white;">☰</button>
+      <div class="greeting" style="margin-top:20px;">
+        <span class="en-text">Good morning,</span>
+        <span class="kh-text kh">អរុណសួស្តី</span>
+      </div>
+      <div class="name">Dr. Sokha 👨‍⚕️</div>
+      <div class="vet-stats">
+        <div class="vet-stat">
+          <div class="n">150</div>
+          <div class="l">
+            <span class="en-text">Clients</span>
+            <span class="kh-text kh">អតិថិជន</span>
+          </div>
+        </div>
+        <div class="vet-stat">
+          <div class="n">12</div>
+          <div class="l">
+            <span class="en-text">Today</span>
+            <span class="kh-text kh">ថ្ងៃនេះ</span>
+          </div>
+        </div>
+        <div class="vet-stat">
+          <div class="n">3</div>
+          <div class="l">
+            <span class="en-text">Overdue</span>
+            <span class="kh-text kh">ហួសពេល</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="padding:0 16px;">
+      <span class="en-text">Clients needing attention</span>
+      <span class="kh-text kh">អតិថិជនត្រូវការការយកចិត្តទុកដាក់</span>
+    </div>
+
+    <div class="client-card">
+      <div class="client-avatar">SM</div>
+      <div style="flex:1; min-width:0;">
+        <div class="client-name">Srey Mom</div>
+        <div class="client-meta">
+          <span class="en-text">Kampong Cham • 25 chickens</span>
+          <span class="kh-text kh">កំពង់ចាម • មាន់ ២៥ ក្បាល</span>
+        </div>
+      </div>
+      <div class="client-badge status-overdue">
+        <span class="en-text">2 LATE</span>
+        <span class="kh-text kh">យឺត ២</span>
+      </div>
+    </div>
+
+    <div class="client-card">
+      <div class="client-avatar">BS</div>
+      <div style="flex:1; min-width:0;">
+        <div class="client-name">Bong Seyha</div>
+        <div class="client-meta">
+          <span class="en-text">Battambang • 550 birds</span>
+          <span class="kh-text kh">បាត់ដំបង • មាន់ ៥៥០ ក្បាល</span>
+        </div>
+      </div>
+      <div class="client-badge status-soon">
+        <span class="en-text">DUE</span>
+        <span class="kh-text kh">ជិតដល់</span>
+      </div>
+    </div>
+
+    <div class="client-card">
+      <div class="client-avatar">NV</div>
+      <div style="flex:1; min-width:0;">
+        <div class="client-name">Neary Vey</div>
+        <div class="client-meta">
+          <span class="en-text">Siem Reap • 40 chickens</span>
+          <span class="kh-text kh">សៀមរាប • មាន់ ៤០ ក្បាល</span>
+        </div>
+      </div>
+      <div class="client-badge status-ok">
+        <span class="en-text">OK</span>
+        <span class="kh-text kh">ល្អ</span>
+      </div>
+    </div>
+
+    <div class="client-card">
+      <div class="client-avatar">CH</div>
+      <div style="flex:1; min-width:0;">
+        <div class="client-name">Chhorn Heng</div>
+        <div class="client-meta">
+          <span class="en-text">Prey Veng • 80 layers</span>
+          <span class="kh-text kh">ព្រៃវែង • មាន់ពង ៨០ ក្បាល</span>
+        </div>
+      </div>
+      <div class="client-badge status-ok">
+        <span class="en-text">OK</span>
+        <span class="kh-text kh">ល្អ</span>
+      </div>
+    </div>
+
+    <div style="padding:16px 16px calc(var(--safe-bottom) + 24px);">
+      <button class="primary-btn" style="background:var(--secondary);">
+        <span class="en-text">+ Send group reminder to 18 clients</span>
+        <span class="kh-text kh">+ ផ្ញើការរំលឹកដល់អតិថិជន ១៨ នាក់</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================== OUTBREAK ALERT ====================== -->
+  <div class="screen" id="screen-outbreak">
+    <div class="alert-banner">
+      <button class="back-btn" onclick="showScreen('home')" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;">←</button>
+      <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px); color:white;">☰</button>
+      <div class="icon">⚠️</div>
+      <div class="title">
+        <span class="en-text">H5N1 Outbreak Alert</span>
+        <span class="kh-text kh">ការជូនដំណឹង​ការផ្ទុះ H5N1</span>
+      </div>
+      <div class="sub">
+        <span class="en-text">Prey Veng province • 4 hours ago</span>
+        <span class="kh-text kh">ខេត្តព្រៃវែង • ៤ ម៉ោងមុន</span>
+      </div>
+    </div>
+
+    <div class="alert-card">
+      <div class="label">
+        <span class="en-text">⚡ Your Risk Level</span>
+        <span class="kh-text kh">⚡ កម្រិតហានិភ័យរបស់អ្នក</span>
+      </div>
+      <h3 style="color:var(--warning);">
+        <span class="en-text">⚠️ ELEVATED — within 50 km</span>
+        <span class="kh-text kh">⚠️ ខ្ពស់ — ក្នុង ៥០ គីឡូម៉ែត្រ</span>
+      </h3>
+      <p>
+        <span class="en-text">2 farms in your district reported sick birds. The Department of Animal Health has issued an emergency vaccination recommendation for backyard poultry.</span>
+        <span class="kh-text kh">មាន ២ កសិដ្ឋាននៅស្រុករបស់អ្នក​បាន​រាយការណ៍​ថា​មាន​មាន់​ឈឺ។ នាយកដ្ឋានសុខភាពសត្វបាន​ផ្ដល់​អនុសាសន៍​បន្ទាន់​ឱ្យ​ចាក់​វ៉ាក់សាំង។</span>
+      </p>
+    </div>
+
+    <div class="alert-card">
+      <div class="label">
+        <span class="en-text">✅ Recommended Actions</span>
+        <span class="kh-text kh">✅ សកម្មភាពត្រូវធ្វើ</span>
+      </div>
+      <ul class="recommend-list">
+        <li>
+          <span class="en-text">Check your flock daily for sick birds</span>
+          <span class="kh-text kh">ពិនិត្យហ្វូងសត្វជារៀងរាល់ថ្ងៃ</span>
+        </li>
+        <li>
+          <span class="en-text">Vaccinate Batch B (overdue) immediately</span>
+          <span class="kh-text kh">ចាក់ថ្នាំក្រុម B ជាបន្ទាន់</span>
+        </li>
+        <li>
+          <span class="en-text">Keep chickens separated from wild birds</span>
+          <span class="kh-text kh">បំបែកមាន់ពីបក្សី​ព្រៃ</span>
+        </li>
+        <li>
+          <span class="en-text">Wash hands after handling chickens</span>
+          <span class="kh-text kh">លាងដៃក្រោយប៉ះមាន់</span>
+        </li>
+        <li>
+          <span class="en-text">Contact Dr. Sokha for emergency visit</span>
+          <span class="kh-text kh">ទាក់ទងគ្រូពេទ្យ សុខា សម្រាប់ការមកជួបបន្ទាន់</span>
+        </li>
+      </ul>
+    </div>
+
+    <button class="alert-btn" onclick="showScreen('log-vaccine')">
+      <span class="en-text">📞 Book Emergency Vaccination</span>
+      <span class="kh-text kh">📞 កក់ការចាក់វ៉ាក់សាំងបន្ទាន់</span>
+    </button>
+  </div>
+
+  <!-- ====================== SIDE MENU ====================== -->
+  <div class="menu-overlay" onclick="closeMenu()"></div>
+  <div class="menu-panel">
+    <div class="menu-header">
+      <div class="menu-title">Vactracker</div>
+      <div class="menu-subtitle">
+        <span class="en-text">Demo for Catalyst 2026 judges</span>
+        <span class="kh-text kh">ការសាកល្បងសម្រាប់ចៅក្រម</span>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <span class="en-text">Screens</span>
+      <span class="kh-text kh">អេក្រង់</span>
+    </div>
+    <button class="menu-item" data-screen="splash" onclick="navTo('splash')">
+      <span class="emoji">🚀</span>
+      <span><span class="en-text">Splash / Welcome</span><span class="kh-text kh">ស្វាគមន៍</span></span>
+    </button>
+    <button class="menu-item" data-screen="home" onclick="navTo('home')">
+      <span class="emoji">🏠</span>
+      <span><span class="en-text">Home dashboard</span><span class="kh-text kh">ផ្ទាំងគ្រប់គ្រង</span></span>
+    </button>
+    <button class="menu-item" data-screen="add-chicken" onclick="navTo('add-chicken')">
+      <span class="emoji">🐔</span>
+      <span><span class="en-text">Add chickens</span><span class="kh-text kh">បន្ថែមមាន់</span></span>
+    </button>
+    <button class="menu-item" data-screen="log-vaccine" onclick="navTo('log-vaccine')">
+      <span class="emoji">💉</span>
+      <span><span class="en-text">Log a vaccine</span><span class="kh-text kh">កត់ត្រាវ៉ាក់សាំង</span></span>
+    </button>
+    <button class="menu-item" data-screen="reminder" onclick="navTo('reminder')">
+      <span class="emoji">🔔</span>
+      <span><span class="en-text">Reminder (lock screen)</span><span class="kh-text kh">ការរំលឹក</span></span>
+    </button>
+    <button class="menu-item" data-screen="vet" onclick="navTo('vet')">
+      <span class="emoji">👨‍⚕️</span>
+      <span><span class="en-text">Vet dashboard</span><span class="kh-text kh">ផ្ទាំងគ្រូពេទ្យ</span></span>
+    </button>
+    <button class="menu-item" data-screen="outbreak" onclick="navTo('outbreak')">
+      <span class="emoji">⚠️</span>
+      <span><span class="en-text">Outbreak alert</span><span class="kh-text kh">ការផ្ទុះជំងឺ</span></span>
+    </button>
+
+    <div class="menu-divider"></div>
+    <div class="menu-section">
+      <span class="en-text">Language</span>
+      <span class="kh-text kh">ភាសា</span>
+    </div>
+    <div class="menu-lang">
+      <button class="menu-lang-btn active" data-lang="en" onclick="setLang('en')">English</button>
+      <button class="menu-lang-btn" data-lang="kh" onclick="setLang('kh')">ខ្មែរ</button>
+    </div>
+
+    <div class="menu-divider"></div>
+    <div style="padding: 12px 24px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+      <span class="en-text">This is a static demo — taps simulate flow but no data is saved. Built for Catalyst Leadership Boot Camp 2026.</span>
+      <span class="kh-text kh">នេះគឺជាការសាកល្បងស្ដ៏ាទិក — ការចុចគ្រាន់តែជាការក្លែងធ្វើ មិនមានទិន្នន័យត្រូវបានរក្សាទុកទេ។</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.querySelectorAll('.menu-item').forEach(m => {
+      m.classList.toggle('active', m.dataset.screen === name);
+    });
+    document.querySelector('.screen.active')?.scrollTo(0, 0);
+    closeMenu();
+  }
+  function navTo(name) { showScreen(name); }
+
+  function updateCount(delta) {
+    const el = document.getElementById('count');
+    let v = parseInt(el.value) + delta;
+    if (v < 1) v = 1;
+    if (v > 999) v = 999;
+    el.value = v;
+  }
+
+  function selectPill(el) {
+    const siblings = el.parentElement.querySelectorAll('.pill');
+    siblings.forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectVaccine(el) {
+    document.querySelectorAll('.vaccine-option').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function showSavedAndGoHome() {
+    const toast = document.createElement('div');
+    toast.className = 'save-toast';
+    toast.textContent = document.body.classList.contains('lang-kh')
+      ? '✓ បានរក្សាទុក! រំលឹកនឹងផ្ញើក្នុង ៣ ខែ'
+      : '✓ Saved! Next reminder set for 3 months';
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.remove(); showScreen('home'); }, 1500);
+  }
+
+  function toggleLang() {
+    const isEn = document.body.classList.contains('lang-en');
+    setLang(isEn ? 'kh' : 'en');
+  }
+
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.querySelectorAll('.menu-lang-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+  }
+
+  function openMenu() {
+    document.querySelector('.menu-overlay').classList.add('open');
+    document.querySelector('.menu-panel').classList.add('open');
+  }
+  function closeMenu() {
+    document.querySelector('.menu-overlay').classList.remove('open');
+    document.querySelector('.menu-panel').classList.remove('open');
+  }
+
+  function showHint() {
+    const hint = document.createElement('div');
+    hint.className = 'hint-toast';
+    hint.innerHTML = document.body.classList.contains('lang-kh')
+      ? '👆 ចុចលើមាន់ ឬ ☰ ដើម្បីរុករក'
+      : '👆 Tap chickens, or ☰ menu to navigate';
+    document.body.appendChild(hint);
+    setTimeout(() => hint.remove(), 4500);
+  }
+
+  // Prevent double-tap zoom on iOS
+  let lastTouch = 0;
+  document.addEventListener('touchend', e => {
+    const now = Date.now();
+    if (now - lastTouch < 300) e.preventDefault();
+    lastTouch = now;
+  }, { passive: false });
+
+  // Set first menu item active
+  document.querySelector('.menu-item[data-screen="splash"]')?.classList.add('active');
+</script>
+
+</body>
+</html>
