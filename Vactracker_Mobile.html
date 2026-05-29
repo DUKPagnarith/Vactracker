@@ -104,13 +104,19 @@
     background: transparent;
     border: none;
     color: var(--text);
-    font-size: 26px;
+    font-size: 22px;
     width: 42px;
     height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.15s;
+    flex-shrink: 0;
   }
+  .back-btn:hover { background: rgba(0,0,0,0.06); }
+  .back-btn:active { background: rgba(0,0,0,0.12); transform: scale(0.92); }
 
   .content {
     padding: 16px;
@@ -929,7 +935,7 @@
   <!-- ====================== ADD CHICKEN ====================== -->
   <div class="screen" id="screen-add-chicken">
     <div class="app-header">
-      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <button class="back-btn" onclick="goBack()" aria-label="Back">‹</button>
       <div style="flex:1; text-align:center;">
         <div class="title">
           <span class="en-text">Add Chickens</span>
@@ -1020,7 +1026,7 @@
   <!-- ====================== LOG VACCINE ====================== -->
   <div class="screen" id="screen-log-vaccine">
     <div class="app-header">
-      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <button class="back-btn" onclick="goBack()" aria-label="Back">‹</button>
       <div style="flex:1; text-align:center;">
         <div class="title">
           <span class="en-text">Log a Vaccine</span>
@@ -1173,7 +1179,7 @@
   <!-- ====================== VET DASHBOARD ====================== -->
   <div class="screen" id="screen-vet">
     <div class="vet-header">
-      <button class="back-btn" onclick="showScreen('home')" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;">←</button>
+      <button class="back-btn" onclick="goBack()" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;" aria-label="Back">‹</button>
       <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px); color:white;">☰</button>
       <div class="greeting" style="margin-top:20px;">
         <span class="en-text">Good morning,</span>
@@ -1281,7 +1287,7 @@
   <!-- ====================== OUTBREAK ALERT ====================== -->
   <div class="screen" id="screen-outbreak">
     <div class="alert-banner">
-      <button class="back-btn" onclick="showScreen('home')" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;">←</button>
+      <button class="back-btn" onclick="goBack()" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;" aria-label="Back">‹</button>
       <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px); color:white;">☰</button>
       <div class="icon">⚠️</div>
       <div class="title">
@@ -1408,15 +1414,34 @@
 </div>
 
 <script>
-  function showScreen(name) {
+  // Navigation history stack for proper back-button behaviour
+  const navHistory = ['splash'];
+
+  function showScreen(name, addToHistory = true) {
+    const current = navHistory[navHistory.length - 1];
+    // Only push to history if navigating to a different screen
+    if (addToHistory && current !== name) {
+      navHistory.push(name);
+    }
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen-' + name).classList.add('active');
+    const target = document.getElementById('screen-' + name);
+    if (target) target.classList.add('active');
     document.querySelectorAll('.menu-item').forEach(m => {
       m.classList.toggle('active', m.dataset.screen === name);
     });
-    document.querySelector('.screen.active')?.scrollTo(0, 0);
+    target?.scrollTo(0, 0);
     closeMenu();
   }
+
+  function goBack() {
+    // Remove current screen from history
+    if (navHistory.length > 1) {
+      navHistory.pop();
+    }
+    const prev = navHistory[navHistory.length - 1] || 'home';
+    showScreen(prev, false); // false = don't re-add to history
+  }
+
   function navTo(name) { showScreen(name); }
 
   function updateCount(delta) {
