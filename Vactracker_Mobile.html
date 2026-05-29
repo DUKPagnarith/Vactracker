@@ -81,19 +81,6 @@
   }
   .app-header .title { font-size: 18px; font-weight: 700; }
   .app-header .subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .icon-img {
-    width: 22px;
-    height: 22px;
-    display: block;
-    object-fit: contain;
-    filter: brightness(0) saturate(100%);
-  }
-  .icon-img.white { filter: brightness(0) invert(1); }
-  .icon-img.green { filter: brightness(0) saturate(100%) invert(31%) sepia(56%) saturate(600%) hue-rotate(90deg); }
-  .icon-img.muted { filter: brightness(0) saturate(100%) invert(50%); }
-  .icon-img.large { width: 32px; height: 32px; }
-  .icon-img.xlarge { width: 44px; height: 44px; }
-
   .header-btn {
     background: var(--primary-light);
     color: var(--primary-dark);
@@ -101,20 +88,23 @@
     width: 42px;
     height: 42px;
     border-radius: 50%;
+    font-size: 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: background 0.15s, transform 0.1s;
   }
-  .header-btn:active { transform: scale(0.92); }
   .header-btn.menu-btn {
     background: transparent;
+    color: var(--text);
+    font-size: 26px;
   }
   .back-btn {
     background: transparent;
     border: none;
+    color: var(--text);
+    font-size: 22px;
     width: 42px;
     height: 42px;
     display: flex;
@@ -155,14 +145,11 @@
     font-weight: 600;
   }
   .nav-item .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 24px;
+    display: block;
     margin-bottom: 2px;
-    height: 28px;
   }
   .nav-item.active { color: var(--primary); }
-  .nav-item.active .icon-img { filter: brightness(0) saturate(100%) invert(31%) sepia(56%) saturate(600%) hue-rotate(90deg); }
 
   /* ========== SPLASH ========== */
   #screen-splash {
@@ -173,7 +160,7 @@
     padding: calc(var(--safe-top) + 60px) 30px calc(var(--safe-bottom) + 40px);
     text-align: center;
   }
-  #screen-splash .logo { font-size: 80px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
+  #screen-splash .logo { font-size: 80px; margin-bottom: 12px; }
   #screen-splash h2 {
     font-size: 42px;
     font-weight: 800;
@@ -325,6 +312,7 @@
     background: var(--primary);
     color: white;
     border: none;
+    font-size: 32px;
     box-shadow: 0 6px 16px rgba(46,125,50,0.4);
     cursor: pointer;
     display: flex;
@@ -703,7 +691,7 @@
     font-family: inherit;
   }
   .menu-item:active { background: var(--primary-light); }
-  .menu-item .emoji { font-size: 22px; display: flex; align-items: center; width: 24px; }
+  .menu-item .emoji { font-size: 22px; }
   .menu-item.active { color: var(--primary); background: #F2FAF3; }
   .menu-divider { height: 1px; background: var(--border); margin: 12px 24px; }
   .menu-section { padding: 0 24px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
@@ -784,7 +772,7 @@
       <span class="kh-text">EN</span>
     </div>
     <div class="splash-center">
-      <div class="logo"><img src="icons/chicken.svg" alt="Chicken" style="width:90px;height:90px;filter:brightness(0) invert(1);margin-bottom:12px;"></div>
+      <div class="logo">🐔</div>
       <h2>Vactracker</h2>
       <p class="tagline">
         <span class="en-text">Protect your flock.<br>Protect your family.</span>
@@ -817,12 +805,8 @@
         </div>
       </div>
       <div style="display:flex; gap:8px;">
-        <button class="header-btn" onclick="showScreen('outbreak')" aria-label="Alerts">
-          <img src="icons/bell.svg" class="icon-img green" alt="Alerts">
-        </button>
-        <button class="header-btn menu-btn" onclick="openMenu()" aria-label="Menu">
-          <img src="icons/menu.svg" class="icon-img" alt="Menu">
-        </button>
+        <button class="header-btn" onclick="showScreen('outbreak')">🔔</button>
+        <button class="header-btn menu-btn" onclick="openMenu()">☰</button>
       </div>
     </div>
 
@@ -868,7 +852,7 @@
       </div>
 
       <div class="chicken-card" onclick="showScreen('log-vaccine')">
-        <div class="chicken-icon"><img src="icons/chicken.svg" class="icon-img large" alt="Chicken" style="filter:brightness(0) saturate(100%) invert(31%) sepia(56%) saturate(600%) hue-rotate(90deg);"></div>
+        <div class="chicken-icon">🐓</div>
         <div class="chicken-info">
           <div class="chicken-name">
             <span class="en-text">Batch A — 12 hens</span>
@@ -886,7 +870,7 @@
       </div>
 
       <div class="chicken-card" onclick="showScreen('log-vaccine')">
-        <div class="chicken-icon amber"><img src="icons/chicken.svg" class="icon-img large" alt="Chicken" style="filter:brightness(0) saturate(100%) invert(63%) sepia(60%) saturate(500%) hue-rotate(5deg);"></div>
+        <div class="chicken-icon amber">🐔</div>
         <div class="chicken-info">
           <div class="chicken-name">
             <span class="en-text">Batch B — 8 layers</span>
@@ -904,7 +888,7 @@
       </div>
 
       <div class="chicken-card" onclick="showScreen('log-vaccine')">
-        <div class="chicken-icon red"><img src="icons/chicken.svg" class="icon-img large" alt="Chicken" style="filter:brightness(0) saturate(100%) invert(30%) sepia(80%) saturate(800%) hue-rotate(340deg);"></div>
+        <div class="chicken-icon red">🐥</div>
         <div class="chicken-info">
           <div class="chicken-name">
             <span class="en-text">Batch C — 5 chicks</span>
@@ -922,28 +906,26 @@
       </div>
     </div>
 
-    <button class="fab" onclick="showScreen('add-chicken')" aria-label="Add chickens">
-      <img src="icons/plus.svg" class="icon-img white large" alt="Add">
-    </button>
+    <button class="fab" onclick="showScreen('add-chicken')">+</button>
 
     <div class="bottom-nav">
       <div class="nav-item active" onclick="showScreen('home')">
-        <span class="icon"><img src="icons/home.svg" class="icon-img muted" alt="Home"></span>
+        <span class="icon">🏠</span>
         <span class="en-text">Home</span>
         <span class="kh-text kh">ដើម</span>
       </div>
       <div class="nav-item" onclick="showScreen('log-vaccine')">
-        <span class="icon"><img src="icons/syringe.svg" class="icon-img muted" alt="Log"></span>
+        <span class="icon">💉</span>
         <span class="en-text">Log</span>
         <span class="kh-text kh">កត់ត្រា</span>
       </div>
       <div class="nav-item" onclick="showScreen('outbreak')">
-        <span class="icon"><img src="icons/warning.svg" class="icon-img muted" alt="Alerts"></span>
+        <span class="icon">⚠️</span>
         <span class="en-text">Alerts</span>
         <span class="kh-text kh">ដំណឹង</span>
       </div>
       <div class="nav-item" onclick="showScreen('vet')">
-        <span class="icon"><img src="icons/stethoscope.svg" class="icon-img muted" alt="Vet"></span>
+        <span class="icon">👨‍⚕️</span>
         <span class="en-text">Vet</span>
         <span class="kh-text kh">គ្រូពេទ្យ</span>
       </div>
@@ -953,18 +935,14 @@
   <!-- ====================== ADD CHICKEN ====================== -->
   <div class="screen" id="screen-add-chicken">
     <div class="app-header">
-      <button class="back-btn" onclick="goBack()" aria-label="Back">
-        <img src="icons/arrow-left.svg" class="icon-img" alt="Back">
-      </button>
+      <button class="back-btn" onclick="goBack()" aria-label="Back">‹</button>
       <div style="flex:1; text-align:center;">
         <div class="title">
           <span class="en-text">Add Chickens</span>
           <span class="kh-text kh">បន្ថែមមាន់</span>
         </div>
       </div>
-      <button class="header-btn menu-btn" onclick="openMenu()" aria-label="Menu">
-        <img src="icons/menu.svg" class="icon-img" alt="Menu">
-      </button>
+      <button class="header-btn menu-btn" onclick="openMenu()">☰</button>
     </div>
 
     <div class="content">
@@ -1048,9 +1026,7 @@
   <!-- ====================== LOG VACCINE ====================== -->
   <div class="screen" id="screen-log-vaccine">
     <div class="app-header">
-      <button class="back-btn" onclick="goBack()" aria-label="Back">
-        <img src="icons/arrow-left.svg" class="icon-img" alt="Back">
-      </button>
+      <button class="back-btn" onclick="goBack()" aria-label="Back">‹</button>
       <div style="flex:1; text-align:center;">
         <div class="title">
           <span class="en-text">Log a Vaccine</span>
@@ -1061,9 +1037,7 @@
           <span class="kh-text kh">ក្រុម A — មាន់ ១២ ក្បាល</span>
         </div>
       </div>
-      <button class="header-btn menu-btn" onclick="openMenu()" aria-label="Menu">
-        <img src="icons/menu.svg" class="icon-img" alt="Menu">
-      </button>
+      <button class="header-btn menu-btn" onclick="openMenu()">☰</button>
     </div>
 
     <div class="content">
@@ -1074,7 +1048,7 @@
 
       <div class="vaccine-list">
         <div class="vaccine-option selected" onclick="selectVaccine(this)">
-          <div class="vac-icon"><img src="icons/syringe.svg" class="icon-img green" alt="Vaccine"></div>
+          <div class="vac-icon">💉</div>
           <div>
             <div class="vac-name">
               <span class="en-text">Newcastle Disease</span>
@@ -1088,7 +1062,7 @@
         </div>
 
         <div class="vaccine-option" onclick="selectVaccine(this)">
-          <div class="vac-icon"><img src="icons/syringe.svg" class="icon-img green" alt="Vaccine"></div>
+          <div class="vac-icon">💉</div>
           <div>
             <div class="vac-name">
               <span class="en-text">Avian Influenza (H5N1)</span>
@@ -1102,7 +1076,7 @@
         </div>
 
         <div class="vaccine-option" onclick="selectVaccine(this)">
-          <div class="vac-icon"><img src="icons/syringe.svg" class="icon-img green" alt="Vaccine"></div>
+          <div class="vac-icon">💉</div>
           <div>
             <div class="vac-name">
               <span class="en-text">Fowl Pox</span>
@@ -1116,7 +1090,7 @@
         </div>
 
         <div class="vaccine-option" onclick="selectVaccine(this)">
-          <div class="vac-icon"><img src="icons/syringe.svg" class="icon-img green" alt="Vaccine"></div>
+          <div class="vac-icon">💉</div>
           <div>
             <div class="vac-name">
               <span class="en-text">Infectious Bronchitis</span>
@@ -1131,15 +1105,14 @@
       </div>
 
       <button class="voice-btn">
-        <img src="icons/microphone.svg" class="icon-img green" alt="Mic" style="width:26px;height:26px;">
+        <span class="mic">🎙️</span>
         <span class="en-text">Hold to record in Khmer</span>
         <span class="kh-text kh">ចុចសង្កត់ដើម្បីថត​ជាខ្មែរ</span>
       </button>
 
-      <button class="primary-btn" onclick="showSavedAndGoHome()" style="margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;">
-        <img src="icons/check.svg" class="icon-img white" alt="Check">
-        <span class="en-text">Save Vaccination</span>
-        <span class="kh-text kh">រក្សាទុក</span>
+      <button class="primary-btn" onclick="showSavedAndGoHome()" style="margin-top:18px;">
+        <span class="en-text">✓ Save Vaccination</span>
+        <span class="kh-text kh">✓ រក្សាទុក</span>
       </button>
     </div>
   </div>
@@ -1168,10 +1141,9 @@
           <span class="kh-text kh">ឥឡូវ</span>
         </div>
       </div>
-      <div class="notif-title" style="display:flex;align-items:center;gap:6px;">
-        <img src="icons/clock.svg" class="icon-img" style="width:16px;height:16px;flex-shrink:0;" alt="Clock">
-        <span class="en-text">Vaccine due in 3 days</span>
-        <span class="kh-text kh">ត្រូវចាក់វ៉ាក់សាំងក្នុង ៣ ថ្ងៃ</span>
+      <div class="notif-title">
+        <span class="en-text">⏰ Vaccine due in 3 days</span>
+        <span class="kh-text kh">⏰ ត្រូវចាក់វ៉ាក់សាំងក្នុង ៣ ថ្ងៃ</span>
       </div>
       <div class="notif-body">
         <span class="en-text">Your Batch B (8 layers) needs a Newcastle booster on Sunday. Tap to confirm or reschedule.</span>
@@ -1207,12 +1179,8 @@
   <!-- ====================== VET DASHBOARD ====================== -->
   <div class="screen" id="screen-vet">
     <div class="vet-header">
-      <button class="back-btn" onclick="goBack()" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px);" aria-label="Back">
-        <img src="icons/arrow-left.svg" class="icon-img white" alt="Back">
-      </button>
-      <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px);" aria-label="Menu">
-        <img src="icons/menu.svg" class="icon-img white" alt="Menu">
-      </button>
+      <button class="back-btn" onclick="goBack()" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;" aria-label="Back">‹</button>
+      <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px); color:white;">☰</button>
       <div class="greeting" style="margin-top:20px;">
         <span class="en-text">Good morning,</span>
         <span class="kh-text kh">អរុណសួស្តី</span>
@@ -1319,13 +1287,9 @@
   <!-- ====================== OUTBREAK ALERT ====================== -->
   <div class="screen" id="screen-outbreak">
     <div class="alert-banner">
-      <button class="back-btn" onclick="goBack()" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px);" aria-label="Back">
-        <img src="icons/arrow-left.svg" class="icon-img white" alt="Back">
-      </button>
-      <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px);" aria-label="Menu">
-        <img src="icons/menu.svg" class="icon-img white" alt="Menu">
-      </button>
-      <div class="icon"><img src="icons/warning.svg" class="icon-img white" style="width:52px;height:52px;" alt="Warning"></div>
+      <button class="back-btn" onclick="goBack()" style="position:absolute; left:8px; top:calc(var(--safe-top) + 12px); color:white;" aria-label="Back">‹</button>
+      <button class="header-btn menu-btn" onclick="openMenu()" style="position:absolute; right:14px; top:calc(var(--safe-top) + 12px); color:white;">☰</button>
+      <div class="icon">⚠️</div>
       <div class="title">
         <span class="en-text">H5N1 Outbreak Alert</span>
         <span class="kh-text kh">ការជូនដំណឹង​ការផ្ទុះ H5N1</span>
@@ -1380,10 +1344,9 @@
       </ul>
     </div>
 
-    <button class="alert-btn" onclick="showScreen('log-vaccine')" style="display:flex;align-items:center;justify-content:center;gap:8px;">
-      <img src="icons/phone.svg" class="icon-img white" alt="Phone">
-      <span class="en-text">Book Emergency Vaccination</span>
-      <span class="kh-text kh">កក់ការចាក់វ៉ាក់សាំងបន្ទាន់</span>
+    <button class="alert-btn" onclick="showScreen('log-vaccine')">
+      <span class="en-text">📞 Book Emergency Vaccination</span>
+      <span class="kh-text kh">📞 កក់ការចាក់វ៉ាក់សាំងបន្ទាន់</span>
     </button>
   </div>
 
@@ -1403,31 +1366,31 @@
       <span class="kh-text kh">អេក្រង់</span>
     </div>
     <button class="menu-item" data-screen="splash" onclick="navTo('splash')">
-      <span class="emoji"><img src="icons/chicken.svg" class="icon-img" style="width:22px;height:22px;" alt="Splash"></span>
+      <span class="emoji">🚀</span>
       <span><span class="en-text">Splash / Welcome</span><span class="kh-text kh">ស្វាគមន៍</span></span>
     </button>
     <button class="menu-item" data-screen="home" onclick="navTo('home')">
-      <span class="emoji"><img src="icons/home.svg" class="icon-img" style="width:22px;height:22px;" alt="Home"></span>
+      <span class="emoji">🏠</span>
       <span><span class="en-text">Home dashboard</span><span class="kh-text kh">ផ្ទាំងគ្រប់គ្រង</span></span>
     </button>
     <button class="menu-item" data-screen="add-chicken" onclick="navTo('add-chicken')">
-      <span class="emoji"><img src="icons/chicken.svg" class="icon-img" style="width:22px;height:22px;" alt="Chickens"></span>
+      <span class="emoji">🐔</span>
       <span><span class="en-text">Add chickens</span><span class="kh-text kh">បន្ថែមមាន់</span></span>
     </button>
     <button class="menu-item" data-screen="log-vaccine" onclick="navTo('log-vaccine')">
-      <span class="emoji"><img src="icons/syringe.svg" class="icon-img" style="width:22px;height:22px;" alt="Vaccine"></span>
+      <span class="emoji">💉</span>
       <span><span class="en-text">Log a vaccine</span><span class="kh-text kh">កត់ត្រាវ៉ាក់សាំង</span></span>
     </button>
     <button class="menu-item" data-screen="reminder" onclick="navTo('reminder')">
-      <span class="emoji"><img src="icons/bell.svg" class="icon-img" style="width:22px;height:22px;" alt="Reminder"></span>
+      <span class="emoji">🔔</span>
       <span><span class="en-text">Reminder (lock screen)</span><span class="kh-text kh">ការរំលឹក</span></span>
     </button>
     <button class="menu-item" data-screen="vet" onclick="navTo('vet')">
-      <span class="emoji"><img src="icons/stethoscope.svg" class="icon-img" style="width:22px;height:22px;" alt="Vet"></span>
+      <span class="emoji">👨‍⚕️</span>
       <span><span class="en-text">Vet dashboard</span><span class="kh-text kh">ផ្ទាំងគ្រូពេទ្យ</span></span>
     </button>
     <button class="menu-item" data-screen="outbreak" onclick="navTo('outbreak')">
-      <span class="emoji"><img src="icons/warning.svg" class="icon-img" style="width:22px;height:22px;" alt="Alert"></span>
+      <span class="emoji">⚠️</span>
       <span><span class="en-text">Outbreak alert</span><span class="kh-text kh">ការផ្ទុះជំងឺ</span></span>
     </button>
 
@@ -1445,9 +1408,6 @@
     <div style="padding: 12px 24px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
       <span class="en-text">This is a static demo — taps simulate flow but no data is saved. Built for Catalyst Leadership Boot Camp 2026.</span>
       <span class="kh-text kh">នេះគឺជាការសាកល្បងស្ដ៏ាទិក — ការចុចគ្រាន់តែជាការក្លែងធ្វើ មិនមានទិន្នន័យត្រូវបានរក្សាទុកទេ។</span>
-    </div>
-    <div style="padding: 8px 24px 4px; font-size: 10px; color: var(--text-muted); opacity: 0.7;">
-      Icons by <a href="https://www.flaticon.com" title="Flaticon" target="_blank" style="color:var(--primary);">Flaticon</a>
     </div>
   </div>
 
